@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useState } from "react";
+import { ChangeEvent, KeyboardEvent, useState } from "react";
 import { TasksFilterValue } from "./App";
 
 export type TaskType = {
@@ -14,10 +14,20 @@ type Props = {
   removeTask: (id: string) => void;
   filter: TasksFilterValue;
   setFilter: (filter: TasksFilterValue) => void;
+  changeStatus: (id: string, b: boolean) => void;
 };
 
-const TodoList = ({ tasks, title, addTask, removeTask, setFilter, filter }: Props) => {
+const TodoList = ({
+  tasks,
+  title,
+  addTask,
+  removeTask,
+  setFilter,
+  filter,
+  changeStatus,
+}: Props) => {
   const [newTaskTitle, setNewTaskTitle] = useState("");
+  const [error, setError] = useState<string | null>(null);
 
   const handleNewTaskTitle = (e: ChangeEvent<HTMLInputElement>) => {
     setNewTaskTitle(e.currentTarget.value);
@@ -25,12 +35,20 @@ const TodoList = ({ tasks, title, addTask, removeTask, setFilter, filter }: Prop
 
   const handleAddTask = () => {
     if (!newTaskTitle.trim()) {
+      setError("Title is required");
       setNewTaskTitle("");
       return;
     }
 
     addTask(newTaskTitle.trim());
     setNewTaskTitle("");
+  };
+
+  const onKeyDownHandler = (e: KeyboardEvent<HTMLInputElement>) => {
+    setError(null);
+    if (e.key === "Enter") {
+      handleAddTask();
+    }
   };
 
   const allFilter = () => setFilter("all");
@@ -46,20 +64,29 @@ const TodoList = ({ tasks, title, addTask, removeTask, setFilter, filter }: Prop
           type="text"
           value={newTaskTitle}
           onChange={handleNewTaskTitle}
-          onKeyUp={(e) => e.key === "Enter" && handleAddTask()}
+          onKeyDown={onKeyDownHandler}
+          className={error ? "error" : ""}
         />
         <button onClick={handleAddTask}>+</button>
+        {error && <div className="error-message">{error}</div>}
       </div>
 
       <ul>
         {tasks.map((t) => {
           const removeTaskHandler = () => removeTask(t.id);
+          const checkboxHandler = (e: ChangeEvent<HTMLInputElement>) => {
+            changeStatus(t.id, e.currentTarget.checked);
+          };
 
           return (
-            <li key={t.id}>
+            <li
+              key={t.id}
+              className={t.isDone ? "is-done" : ""}
+            >
               <input
                 type="checkbox"
                 checked={t.isDone}
+                onChange={checkboxHandler}
               />
               <span>{t.description}</span>
               <button onClick={removeTaskHandler}>x</button>
