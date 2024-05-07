@@ -1,3 +1,5 @@
+import { ControlPoint } from "@mui/icons-material";
+import { IconButton, TextField } from "@mui/material";
 import { ChangeEvent, KeyboardEvent, useState } from "react";
 
 type Props = {
@@ -32,15 +34,21 @@ export function AddItemInput({ addItem }: Props) {
 
   return (
     <div>
-      <input
-        type="text"
+      <TextField
         value={newTaskTitle}
         onChange={handleNewTaskTitle}
         onKeyDown={onKeyDownHandler}
-        className={error ? "error" : ""}
+        helperText={error}
+        error={!!error}
       />
-      <button onClick={handleAddTask}>+</button>
-      {error && <div className="error-message">{error}</div>}
+      <IconButton
+        onClick={handleAddTask}
+        size="large"
+        color="info"
+        style={{ marginTop: "5px" }}
+      >
+        <ControlPoint />
+      </IconButton>
     </div>
   );
 }

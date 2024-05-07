@@ -2,6 +2,8 @@ import { ChangeEvent } from "react";
 import { TasksFilterValue } from "./App";
 import { AddItemInput } from "./AddItemInput";
 import { EditableSpan } from "./EditableSpan";
+import { Button, Checkbox, IconButton, Typography } from "@mui/material";
+import { DeleteOutline } from "@mui/icons-material";
 
 export type TaskType = {
   id: string;
@@ -46,23 +48,40 @@ const TodoList = ({
 
   const removeTodolist = () => deleteTodolist(id);
 
-	const onChangeTodoListTitle = (title: string) => {
-		changeTodoListTitle(title, id)
-	}
+  const onChangeTodoListTitle = (title: string) => {
+    changeTodoListTitle(title, id);
+  };
 
   return (
     <div className="todoList">
-      <div>
-        <h3>
-          <EditableSpan
-            onChangeItemTitle={onChangeTodoListTitle}
-            title={title}
-          />
-          <button onClick={removeTodolist}>x</button>
-        </h3>
-      </div>
+      <Typography
+        variant="h5"
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+					paddingBlock: "1rem",
+					fontWeight: 600
+        }}
+      >
+        <EditableSpan
+          onChangeItemTitle={onChangeTodoListTitle}
+          title={title}
+        />
+        <IconButton
+          onClick={removeTodolist}
+          color="error"
+        >
+          <DeleteOutline />
+        </IconButton>
+      </Typography>
+
       <AddItemInput addItem={handleAddTask} />
-      <ul>
+      <div
+        style={{
+          paddingBlock: "10px",
+        }}
+      >
         {tasks.map((t) => {
           const removeTaskHandler = () => removeTask(t.id, id);
           const checkboxHandler = (e: ChangeEvent<HTMLInputElement>) => {
@@ -74,44 +93,57 @@ const TodoList = ({
           };
 
           return (
-            <li
+            <div
               key={t.id}
               className={t.isDone ? "is-done" : ""}
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+              }}
             >
-              <input
-                type="checkbox"
-                checked={t.isDone}
-                onChange={checkboxHandler}
-              />
-              <EditableSpan
-                title={t.title}
-                onChangeItemTitle={onChangeTaskTitle}
-              />
-              <button onClick={removeTaskHandler}>x</button>
-            </li>
+              <div style={{ display: "flex", alignItems: "center", gap: 2 }}>
+                <Checkbox
+                  checked={t.isDone}
+                  onChange={checkboxHandler}
+                />
+                <EditableSpan
+                  title={t.title}
+                  onChangeItemTitle={onChangeTaskTitle}
+                />
+              </div>
+              <IconButton
+                onClick={removeTaskHandler}
+                color="error"
+              >
+                <DeleteOutline />
+              </IconButton>
+            </div>
           );
         })}
-      </ul>
+      </div>
 
-      <div>
-        <button
-          className={filter === "all" ? "active" : undefined}
+      <div style={{ paddingBlock: "10px" }}>
+        <Button
           onClick={allFilter}
+          variant={filter === "all" ? "contained" : "text"}
         >
           All
-        </button>
-        <button
-          className={filter === "active" ? "active" : undefined}
+        </Button>
+        <Button
+          color="success"
+          variant={filter === "active" ? "contained" : "text"}
           onClick={activeFilter}
         >
           Active
-        </button>
-        <button
-          className={filter === "completed" ? "active" : undefined}
+        </Button>
+        <Button
+          color="error"
+          variant={filter === "completed" ? "contained" : "text"}
           onClick={completedFilter}
         >
           Completed
-        </button>
+        </Button>
       </div>
     </div>
   );
