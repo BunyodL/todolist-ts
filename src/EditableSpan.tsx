@@ -1,12 +1,8 @@
-import { Done, Visibility, VisibilityOff } from "@mui/icons-material";
+import { Done } from "@mui/icons-material";
 import {
-  FormControl,
-  IconButton,
-  InputAdornment,
-  InputLabel,
-  OutlinedInput,
-  TextField,
-  Typography,
+	FormControl,
+	IconButton,
+	InputAdornment, OutlinedInput
 } from "@mui/material";
 import { ChangeEvent, useState } from "react";
 
@@ -50,7 +46,7 @@ export function EditableSpan(props: Props) {
               aria-label="confirm changes"
               onClick={activateViewMode}
               edge="end"
-							size="small"
+              size="small"
             >
               <Done />
             </IconButton>

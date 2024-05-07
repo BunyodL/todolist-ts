@@ -4,15 +4,15 @@ import TodoList, { TaskType } from "./TodoList";
 import { v1 } from "uuid";
 import { AddItemInput } from "./AddItemInput";
 import {
-  AppBar,
-  Box,
-  Button,
-  Container,
-  Grid,
-  IconButton,
-  Paper,
-  Toolbar,
-  Typography,
+	AppBar,
+	Box,
+	Button,
+	Container,
+	Grid,
+	IconButton,
+	Paper,
+	Toolbar,
+	Typography,
 } from "@mui/material";
 import { Menu } from "@mui/icons-material";
 
@@ -154,7 +154,11 @@ function App() {
         </AppBar>
       </Box>
 
-      <Container>
+      <Container
+        sx={{
+          paddingBottom: 10,
+        }}
+      >
         <Box
           sx={{
             paddingBlock: "20px",
