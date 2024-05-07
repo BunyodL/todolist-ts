@@ -1,6 +1,7 @@
 import { ChangeEvent } from "react";
 import { TasksFilterValue } from "./App";
 import { AddItemInput } from "./AddItemInput";
+import { EditableSpan } from "./EditableSpan";
 
 export type TaskType = {
   id: string;
@@ -18,6 +19,8 @@ type Props = {
   changeStatus: (id: string, b: boolean, todolistId: string) => void;
   id: string;
   deleteTodolist: (id: string) => void;
+  changeTaskTitle: (title: string, taskId: string, todolistId: string) => void;
+  changeTodoListTitle: (title: string, todolistId: string) => void;
 };
 
 const TodoList = ({
@@ -30,6 +33,8 @@ const TodoList = ({
   changeStatus,
   id,
   deleteTodolist,
+  changeTaskTitle,
+  changeTodoListTitle,
 }: Props) => {
   function handleAddTask(text: string) {
     addTask(text, id);
@@ -41,11 +46,18 @@ const TodoList = ({
 
   const removeTodolist = () => deleteTodolist(id);
 
+	const onChangeTodoListTitle = (title: string) => {
+		changeTodoListTitle(title, id)
+	}
+
   return (
     <div className="todoList">
       <div>
         <h3>
-          {title}
+          <EditableSpan
+            onChangeItemTitle={onChangeTodoListTitle}
+            title={title}
+          />
           <button onClick={removeTodolist}>x</button>
         </h3>
       </div>
@@ -55,6 +67,10 @@ const TodoList = ({
           const removeTaskHandler = () => removeTask(t.id, id);
           const checkboxHandler = (e: ChangeEvent<HTMLInputElement>) => {
             changeStatus(t.id, e.currentTarget.checked, id);
+          };
+
+          const onChangeTaskTitle = (title: string) => {
+            changeTaskTitle(title, t.id, id);
           };
 
           return (
@@ -67,7 +83,10 @@ const TodoList = ({
                 checked={t.isDone}
                 onChange={checkboxHandler}
               />
-              <span>{t.title}</span>
+              <EditableSpan
+                title={t.title}
+                onChangeItemTitle={onChangeTaskTitle}
+              />
               <button onClick={removeTaskHandler}>x</button>
             </li>
           );
