@@ -40,6 +40,7 @@ export function AddItemInput({ addItem }: Props) {
         onKeyDown={onKeyDownHandler}
         helperText={error}
         error={!!error}
+        label="Create"
       />
       <IconButton
         onClick={handleAddTask}

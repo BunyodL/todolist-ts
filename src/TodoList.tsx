@@ -60,8 +60,8 @@ const TodoList = ({
           display: "flex",
           justifyContent: "space-between",
           alignItems: "center",
-					paddingBlock: "1rem",
-					fontWeight: 600
+          paddingBlock: "1rem",
+          fontWeight: 600,
         }}
       >
         <EditableSpan
@@ -71,6 +71,7 @@ const TodoList = ({
         <IconButton
           onClick={removeTodolist}
           color="error"
+					title={"Delete todolist"}
         >
           <DeleteOutline />
         </IconButton>
@@ -123,7 +124,7 @@ const TodoList = ({
         })}
       </div>
 
-      <div style={{ paddingBlock: "10px" }}>
+      <div style={{ paddingBlock: "10px", display: "flex", gap: 8 }}>
         <Button
           onClick={allFilter}
           variant={filter === "all" ? "contained" : "text"}

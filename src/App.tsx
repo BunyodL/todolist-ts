@@ -160,16 +160,25 @@ function App() {
             paddingBlock: "20px",
           }}
         >
-          <h2>Create a todolist</h2>
-          {/* <div style={{
-						backgroundColor: "white",
-						display: "flex",
-						padding: "5px",
-						width: "auto"
-					}}> */}
+          <Typography
+            variant="h4"
+            sx={{
+              paddingBottom: 2,
+            }}
+          >
+            Create todolist
+          </Typography>
           <AddItemInput addItem={addTodolistHandler} />
-          {/* </div> */}
         </Box>
+        <hr style={{ opacity: 0.5, marginBottom: "15px" }} />
+        <Typography
+          variant="h4"
+          sx={{
+            paddingBottom: 2,
+          }}
+        >
+          Todolists
+        </Typography>
         <Grid
           container
           spacing={4}
