@@ -1,5 +1,6 @@
-import { ChangeEvent, KeyboardEvent, useState } from "react";
+import { ChangeEvent } from "react";
 import { TasksFilterValue } from "./App";
+import { AddItemInput } from "./AddItemInput";
 
 export type TaskType = {
   id: string;
@@ -16,6 +17,7 @@ type Props = {
   changeFilter: (filter: TasksFilterValue, todolistId: string) => void;
   changeStatus: (id: string, b: boolean, todolistId: string) => void;
   id: string;
+  deleteTodolist: (id: string) => void;
 };
 
 const TodoList = ({
@@ -27,52 +29,27 @@ const TodoList = ({
   filter,
   changeStatus,
   id,
+  deleteTodolist,
 }: Props) => {
-  const [newTaskTitle, setNewTaskTitle] = useState("");
-  const [error, setError] = useState<string | null>(null);
-
-  const handleNewTaskTitle = (e: ChangeEvent<HTMLInputElement>) => {
-    setNewTaskTitle(e.currentTarget.value);
-  };
-
-  const handleAddTask = () => {
-    if (!newTaskTitle.trim()) {
-      setError("Title is required");
-      setNewTaskTitle("");
-      return;
-    }
-
-    addTask(newTaskTitle.trim(), id);
-    setNewTaskTitle("");
-  };
-
-  const onKeyDownHandler = (e: KeyboardEvent<HTMLInputElement>) => {
-    setError(null);
-    if (e.key === "Enter") {
-      handleAddTask();
-    }
-  };
+  function handleAddTask(text: string) {
+    addTask(text, id);
+  }
 
   const allFilter = () => changeFilter("all", id);
   const activeFilter = () => changeFilter("active", id);
   const completedFilter = () => changeFilter("completed", id);
 
+  const removeTodolist = () => deleteTodolist(id);
+
   return (
     <div className="todoList">
-      <h3>{title}</h3>
-
       <div>
-        <input
-          type="text"
-          value={newTaskTitle}
-          onChange={handleNewTaskTitle}
-          onKeyDown={onKeyDownHandler}
-          className={error ? "error" : ""}
-        />
-        <button onClick={handleAddTask}>+</button>
-        {error && <div className="error-message">{error}</div>}
+        <h3>
+          {title}
+          <button onClick={removeTodolist}>x</button>
+        </h3>
       </div>
-
+      <AddItemInput addItem={handleAddTask} />
       <ul>
         {tasks.map((t) => {
           const removeTaskHandler = () => removeTask(t.id, id);
