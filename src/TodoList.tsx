@@ -3,18 +3,19 @@ import { TasksFilterValue } from "./App";
 
 export type TaskType = {
   id: string;
-  description: string;
+  title: string;
   isDone: boolean;
 };
 
 type Props = {
   tasks: Array<TaskType>;
   title: string;
-  addTask: (text: string) => void;
-  removeTask: (id: string) => void;
+  addTask: (text: string, todolistId: string) => void;
+  removeTask: (id: string, todolistId: string) => void;
   filter: TasksFilterValue;
-  setFilter: (filter: TasksFilterValue) => void;
-  changeStatus: (id: string, b: boolean) => void;
+  changeFilter: (filter: TasksFilterValue, todolistId: string) => void;
+  changeStatus: (id: string, b: boolean, todolistId: string) => void;
+  id: string;
 };
 
 const TodoList = ({
@@ -22,9 +23,10 @@ const TodoList = ({
   title,
   addTask,
   removeTask,
-  setFilter,
+  changeFilter,
   filter,
   changeStatus,
+  id,
 }: Props) => {
   const [newTaskTitle, setNewTaskTitle] = useState("");
   const [error, setError] = useState<string | null>(null);
@@ -40,7 +42,7 @@ const TodoList = ({
       return;
     }
 
-    addTask(newTaskTitle.trim());
+    addTask(newTaskTitle.trim(), id);
     setNewTaskTitle("");
   };
 
@@ -51,9 +53,9 @@ const TodoList = ({
     }
   };
 
-  const allFilter = () => setFilter("all");
-  const activeFilter = () => setFilter("active");
-  const completedFilter = () => setFilter("completed");
+  const allFilter = () => changeFilter("all", id);
+  const activeFilter = () => changeFilter("active", id);
+  const completedFilter = () => changeFilter("completed", id);
 
   return (
     <div className="todoList">
@@ -73,9 +75,9 @@ const TodoList = ({
 
       <ul>
         {tasks.map((t) => {
-          const removeTaskHandler = () => removeTask(t.id);
+          const removeTaskHandler = () => removeTask(t.id, id);
           const checkboxHandler = (e: ChangeEvent<HTMLInputElement>) => {
-            changeStatus(t.id, e.currentTarget.checked);
+            changeStatus(t.id, e.currentTarget.checked, id);
           };
 
           return (
@@ -88,7 +90,7 @@ const TodoList = ({
                 checked={t.isDone}
                 onChange={checkboxHandler}
               />
-              <span>{t.description}</span>
+              <span>{t.title}</span>
               <button onClick={removeTaskHandler}>x</button>
             </li>
           );
