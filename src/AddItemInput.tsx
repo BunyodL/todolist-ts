@@ -1,13 +1,14 @@
-import { ControlPoint } from "@mui/icons-material";
-import { IconButton, TextField } from "@mui/material";
-import { ChangeEvent, KeyboardEvent, useState } from "react";
+import { ControlPoint } from '@mui/icons-material';
+import { IconButton, TextField } from '@mui/material';
+import { ChangeEvent, KeyboardEvent, useState } from 'react';
 
 type Props = {
   addItem: (text: string) => void;
+  type?: string;
 };
 
-export function AddItemInput({ addItem }: Props) {
-  const [newTaskTitle, setNewTaskTitle] = useState("");
+export function AddItemInput({ addItem, type }: Props) {
+  const [newTaskTitle, setNewTaskTitle] = useState('');
   const [error, setError] = useState<string | null>(null);
 
   const handleNewTaskTitle = (e: ChangeEvent<HTMLInputElement>) => {
@@ -16,24 +17,30 @@ export function AddItemInput({ addItem }: Props) {
 
   const handleAddTask = () => {
     if (!newTaskTitle.trim()) {
-      setError("Title is required");
-      setNewTaskTitle("");
+      setError('Title is required');
+      setNewTaskTitle('');
       return;
     }
 
     addItem(newTaskTitle.trim());
-    setNewTaskTitle("");
+    setNewTaskTitle('');
   };
 
   const onKeyDownHandler = (e: KeyboardEvent<HTMLInputElement>) => {
     setError(null);
-    if (e.key === "Enter") {
+    if (e.key === 'Enter') {
       handleAddTask();
     }
   };
 
   return (
-    <div>
+    <div
+		style={{
+			display: "flex",
+			alignItems: "center",
+			gap: 5
+		}}
+		>
       <TextField
         value={newTaskTitle}
         onChange={handleNewTaskTitle}
@@ -46,7 +53,7 @@ export function AddItemInput({ addItem }: Props) {
         onClick={handleAddTask}
         size="large"
         color="info"
-        style={{ marginTop: "5px" }}
+        style={{padding: "8px"}}
       >
         <ControlPoint />
       </IconButton>
