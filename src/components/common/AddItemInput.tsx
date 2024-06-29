@@ -35,12 +35,12 @@ export function AddItemInput({ addItem, type }: Props) {
 
   return (
     <div
-		style={{
-			display: "flex",
-			alignItems: "center",
-			gap: 5
-		}}
-		>
+      style={{
+        display: 'flex',
+        alignItems: 'center',
+        gap: 5,
+      }}
+    >
       <TextField
         value={newTaskTitle}
         onChange={handleNewTaskTitle}
@@ -53,7 +53,8 @@ export function AddItemInput({ addItem, type }: Props) {
         onClick={handleAddTask}
         size="large"
         color="info"
-        style={{padding: "8px"}}
+        style={{ padding: '8px' }}
+        title={type === 'task' ? 'Add task' : 'Add todolist'}
       >
         <ControlPoint />
       </IconButton>

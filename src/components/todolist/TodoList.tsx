@@ -1,15 +1,9 @@
 import { ChangeEvent } from 'react';
-import { TasksFilterValue } from './App';
-import { AddItemInput } from './AddItemInput';
-import { EditableSpan } from './EditableSpan';
+import { AddItemInput } from '../common/AddItemInput';
+import { EditableSpan } from '../common/EditableSpan';
 import { Button, Checkbox, IconButton, Typography } from '@mui/material';
 import { DeleteOutline } from '@mui/icons-material';
-
-export type TaskType = {
-  id: string;
-  title: string;
-  isDone: boolean;
-};
+import { TaskType, TasksFilterValue } from './todolist.types';
 
 type Props = {
   id: string;
@@ -18,8 +12,8 @@ type Props = {
   filter: TasksFilterValue;
   addTask: (text: string, todolistId: string) => void;
   removeTask: (id: string, todolistId: string) => void;
-  changeFilter: (filter: TasksFilterValue, todolistId: string) => void;
-  changeStatus: (id: string, b: boolean, todolistId: string) => void;
+  changeTodoListFilter: (filter: TasksFilterValue, todolistId: string) => void;
+  changeTaskStatus: (id: string, b: boolean, todolistId: string) => void;
   deleteTodolist: (id: string) => void;
   changeTaskTitle: (title: string, taskId: string, todolistId: string) => void;
   changeTodoListTitle: (title: string, todolistId: string) => void;
@@ -30,9 +24,9 @@ export const TodoList = ({
   title,
   addTask,
   removeTask,
-  changeFilter,
+  changeTodoListFilter,
   filter,
-  changeStatus,
+  changeTaskStatus,
   id,
   deleteTodolist,
   changeTaskTitle,
@@ -42,9 +36,9 @@ export const TodoList = ({
     addTask(text, id);
   }
 
-  const allFilter = () => changeFilter('all', id);
-  const activeFilter = () => changeFilter('active', id);
-  const completedFilter = () => changeFilter('completed', id);
+  const allFilter = () => changeTodoListFilter('all', id);
+  const activeFilter = () => changeTodoListFilter('active', id);
+  const completedFilter = () => changeTodoListFilter('completed', id);
 
   const removeTodolist = () => deleteTodolist(id);
 
@@ -87,12 +81,12 @@ export const TodoList = ({
         }}
       >
         {!tasks.length ? (
-          <AddSomeTasks />
+          <NoTasksHere />
         ) : (
           tasks.map((t) => {
             const removeTaskHandler = () => removeTask(t.id, id);
             const checkboxHandler = (e: ChangeEvent<HTMLInputElement>) => {
-              changeStatus(t.id, e.currentTarget.checked, id);
+              changeTaskStatus(t.id, e.currentTarget.checked, id);
             };
 
             const onChangeTaskTitle = (title: string) => {
@@ -168,7 +162,7 @@ export const TodoList = ({
   );
 };
 
-function AddSomeTasks() {
+function NoTasksHere() {
   return (
     <Typography
       variant="h6"
@@ -181,7 +175,7 @@ function AddSomeTasks() {
         opacity: 0.5,
       }}
     >
-      Add some tasks
+      There are no tasks here...
     </Typography>
   );
 }
