@@ -3,37 +3,38 @@ import { AddItemInput } from '../common/AddItemInput';
 import { EditableSpan } from '../common/EditableSpan';
 import { Button, Checkbox, IconButton, Typography } from '@mui/material';
 import { DeleteOutline } from '@mui/icons-material';
-import { TaskType, TasksFilterValue } from './todolist.types';
+import { TasksFilterValue } from '../../@types/todolist/todolist.types';
+import { useAppDispatch, useAppSelector } from '../../state/store';
+import {
+  addTaskAC,
+  changeTaskStatusAC,
+  changeTaskTitleAC,
+  removeTaskAC,
+} from '../../state/tasks-reducer';
 
 type Props = {
   id: string;
-  tasks: Array<TaskType>;
   title: string;
   filter: TasksFilterValue;
-  addTask: (text: string, todolistId: string) => void;
-  removeTask: (id: string, todolistId: string) => void;
   changeTodoListFilter: (filter: TasksFilterValue, todolistId: string) => void;
-  changeTaskStatus: (id: string, b: boolean, todolistId: string) => void;
   deleteTodolist: (id: string) => void;
-  changeTaskTitle: (title: string, taskId: string, todolistId: string) => void;
-  changeTodoListTitle: (title: string, todolistId: string) => void;
+  changeTodoListTitle: (todolistId: string, title: string) => void;
 };
 
 export const TodoList = ({
-  tasks,
   title,
-  addTask,
-  removeTask,
   changeTodoListFilter,
   filter,
-  changeTaskStatus,
   id,
   deleteTodolist,
-  changeTaskTitle,
   changeTodoListTitle,
 }: Props) => {
+  const dispatch = useAppDispatch();
+
+  const tasks = useAppSelector((s) => s.tasks[id]);
+
   function handleAddTask(text: string) {
-    addTask(text, id);
+    dispatch(addTaskAC(text, id));
   }
 
   const allFilter = () => changeTodoListFilter('all', id);
@@ -43,8 +44,18 @@ export const TodoList = ({
   const removeTodolist = () => deleteTodolist(id);
 
   const onChangeTodoListTitle = (title: string) => {
-    changeTodoListTitle(title, id);
+    changeTodoListTitle(id, title);
   };
+
+  let tasksForTodolist = tasks;
+
+  if (filter === 'active') {
+    tasksForTodolist = tasksForTodolist.filter((t) => !t.isDone);
+  }
+
+  if (filter === 'completed') {
+    tasksForTodolist = tasksForTodolist.filter((t) => t.isDone);
+  }
 
   return (
     <div className="todoList">
@@ -80,17 +91,19 @@ export const TodoList = ({
           paddingBlock: '10px',
         }}
       >
-        {!tasks.length ? (
+        {!tasksForTodolist.length ? (
           <NoTasksHere />
         ) : (
-          tasks.map((t) => {
-            const removeTaskHandler = () => removeTask(t.id, id);
+          tasksForTodolist.map((t) => {
+            const removeTaskHandler = () => {
+              dispatch(removeTaskAC(t.id, id));
+            };
             const checkboxHandler = (e: ChangeEvent<HTMLInputElement>) => {
-              changeTaskStatus(t.id, e.currentTarget.checked, id);
+              dispatch(changeTaskStatusAC(e.currentTarget.checked, t.id, id));
             };
 
             const onChangeTaskTitle = (title: string) => {
-              changeTaskTitle(title, t.id, id);
+              dispatch(changeTaskTitleAC(title, t.id, id));
             };
 
             return (

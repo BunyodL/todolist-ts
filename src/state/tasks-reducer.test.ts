@@ -1,13 +1,13 @@
 import { v1 } from 'uuid';
-import { TodoListsTasksType } from '../components/todolist/todolist.types';
+import { TodoListsTasksType } from '../@types/todolist/todolist.types';
 import {
-  addTask,
-  changeTaskStatus,
-  changeTaskTitle,
-  removeTask,
+  addTaskAC,
+  changeTaskStatusAC,
+  changeTaskTitleAC,
+  removeTaskAC,
   tasksReducer,
 } from './tasks-reducer';
-import { addTodolist, deleteTodolist } from './todolists-reducer';
+import { addTodolistAC, deleteTodolistAC } from './todolists-reducer';
 
 const todolistId1 = v1();
 const todolistId2 = v1();
@@ -41,7 +41,7 @@ describe('the task', () => {
   test('should be added', () => {
     const taskTitle = 'new task';
 
-    const action = addTask(taskTitle, todolistId2);
+    const action = addTaskAC(taskTitle, todolistId2);
     const endState = tasksReducer(allTasks, action);
 
     expect(endState[todolistId2].length).toBe(5);
@@ -52,7 +52,7 @@ describe('the task', () => {
   });
 
   test('should be removed', () => {
-    const action = removeTask(task1Id3, todolistId1);
+    const action = removeTaskAC(task1Id3, todolistId1);
     const endState = tasksReducer(allTasks, action);
 
     expect(endState[todolistId1].length).toBe(4);
@@ -63,7 +63,7 @@ describe('the task', () => {
   test('should change the title', () => {
     const newTitle = 'Title changed';
 
-    const action = changeTaskTitle(newTitle, task2Id2, todolistId2);
+    const action = changeTaskTitleAC(newTitle, task2Id2, todolistId2);
     const endState = tasksReducer(allTasks, action);
 
     expect(endState[todolistId2][1].title).toBe(newTitle);
@@ -73,7 +73,7 @@ describe('the task', () => {
   });
 
   test('must change the status', () => {
-    const action = changeTaskStatus(true, task1Id4, todolistId1);
+    const action = changeTaskStatusAC(true, task1Id4, todolistId1);
     const endState = tasksReducer(allTasks, action);
 
     expect(endState[todolistId1][3].isDone).toBeTruthy();
@@ -88,7 +88,7 @@ describe('the task', () => {
   test('new array should be added when new todolist is added', () => {
     const todoTitle = 'new Todo';
 
-    const action = addTodolist(todoTitle);
+    const action = addTodolistAC(todoTitle);
     const endState = tasksReducer(allTasks, action);
 
     const keys = Object.keys(endState);
@@ -103,7 +103,7 @@ describe('the task', () => {
   });
 
   test('the tasks array should be removed when the todolist is deleted', () => {
-    const action = deleteTodolist(todolistId1);
+    const action = deleteTodolistAC(todolistId1);
     const endState = tasksReducer(allTasks, action);
 
     const keys = Object.keys(endState);

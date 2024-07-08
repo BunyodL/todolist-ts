@@ -1,9 +1,14 @@
 import { v1 } from 'uuid';
-import { TaskType, TodoListsTasksType } from '../components/todolist/todolist.types';
-import { ADD_TODOLIST, AddTodolistType, DELETE_TODOLIST, DeleteTodolistType } from './todolists-reducer';
+import { TaskType, TodoListsTasksType } from '../@types/todolist/todolist.types';
+import {
+	ADD_TODOLIST,
+	AddTodolistType,
+	DELETE_TODOLIST,
+	DeleteTodolistType,
+	todolistId1,
+	todolistId2,
+} from './todolists-reducer';
 
-const todolistId1 = v1();
-const todolistId2 = v1();
 const task1Id1 = v1();
 const task1Id2 = v1();
 const task1Id3 = v1();
@@ -100,7 +105,7 @@ export const tasksReducer = (
     }
 
     default:
-      throw new Error("I don't know this action type");
+      return state;
   }
 };
 
@@ -138,19 +143,19 @@ type ActionsType =
   | AddTodolistType
   | DeleteTodolistType;
 
-export const addTask = (text: string, todolistId: string): AddTaskType => ({
+export const addTaskAC = (text: string, todolistId: string): AddTaskType => ({
   type: ADD_TASK,
   text,
   todolistId,
 });
 
-export const removeTask = (taskId: string, todolistId: string): RemoveTaskType => ({
+export const removeTaskAC = (taskId: string, todolistId: string): RemoveTaskType => ({
   type: REMOVE_TASK,
   todolistId,
   taskId,
 });
 
-export const changeTaskTitle = (
+export const changeTaskTitleAC = (
   title: string,
   taskId: string,
   todolistId: string
@@ -161,7 +166,7 @@ export const changeTaskTitle = (
   taskId,
 });
 
-export const changeTaskStatus = (
+export const changeTaskStatusAC = (
   isDone: boolean,
   taskId: string,
   todolistId: string
