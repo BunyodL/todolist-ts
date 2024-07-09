@@ -1,72 +1,53 @@
 import './App.css';
 import { TodoList } from './components/todolist/TodoList';
 import { AddItemInput } from './components/common/AddItemInput';
-import {
-	AppBar,
-	Box,
-	Button,
-	Container,
-	Grid,
-	IconButton,
-	Paper,
-	Toolbar,
-	Typography,
-} from '@mui/material';
-import { Menu } from '@mui/icons-material';
+import { Box, Container, Grid, Paper, Typography } from '@mui/material';
 import { TasksFilterValue } from './@types/todolist';
 import {
-	addTodolistAC,
-	changeTodolistFilterAC,
-	changeTodolistTitleAC,
-	deleteTodolistAC,
+  addTodolistAC,
+  changeTodolistFilterAC,
+  changeTodolistTitleAC,
+  deleteTodolistAC,
 } from './state/todolists-reducer';
 import { useAppDispatch, useAppSelector } from './state/store';
+import { useCallback } from 'react';
+import { Header } from './components/header/Header';
 
 export function AppWithRedux() {
   const dispatch = useAppDispatch();
   const todolists = useAppSelector((s) => s.todolists);
 
-  function addTodolist(title: string) {
-    dispatch(addTodolistAC(title));
-  }
+  const addTodolist = useCallback(
+    (title: string) => {
+      dispatch(addTodolistAC(title));
+    },
+    [dispatch]
+  );
 
-  function deleteTodolist(todolistId: string) {
-    dispatch(deleteTodolistAC(todolistId));
-  }
+  const deleteTodolist = useCallback(
+    (todolistId: string) => {
+      dispatch(deleteTodolistAC(todolistId));
+    },
+    [dispatch]
+  );
 
-  function changeTodoListFilter(filter: TasksFilterValue, todolistId: string) {
-    dispatch(changeTodolistFilterAC(todolistId, filter));
-  }
+  const changeTodoListFilter = useCallback(
+    (filter: TasksFilterValue, todolistId: string) => {
+      dispatch(changeTodolistFilterAC(todolistId, filter));
+    },
+    [dispatch]
+  );
 
-  function changeTodoListTitle(todolistId: string, title: string) {
-    dispatch(changeTodolistTitleAC(todolistId, title));
-  }
+  const changeTodoListTitle = useCallback(
+    (todolistId: string, title: string) => {
+      dispatch(changeTodolistTitleAC(todolistId, title));
+    },
+    [dispatch]
+  );
 
   return (
     <div className="App">
-      <Box sx={{ flexGrow: 1 }}>
-        <AppBar position="static">
-          <Toolbar>
-            <IconButton
-              size="large"
-              edge="start"
-              color="inherit"
-              aria-label="menu"
-              sx={{ mr: 2 }}
-            >
-              <Menu />
-            </IconButton>
-            <Typography
-              variant="h6"
-              component="div"
-              sx={{ flexGrow: 1 }}
-            >
-              Todo Lists
-            </Typography>
-            <Button color="inherit">Login</Button>
-          </Toolbar>
-        </AppBar>
-      </Box>
+      <Header />
 
       <Container
         sx={{
@@ -97,12 +78,13 @@ export function AppWithRedux() {
         >
           Todolists
         </Typography>
+
         <Grid
           container
           spacing={4}
         >
           {todolists.map((tl) => {
-                        return (
+            return (
               <Grid
                 item
                 key={tl.id}

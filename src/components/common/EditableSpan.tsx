@@ -1,28 +1,28 @@
 import { Done } from '@mui/icons-material';
 import { FormControl, IconButton, InputAdornment, OutlinedInput } from '@mui/material';
-import { ChangeEvent, KeyboardEvent, useState } from 'react';
+import React, { ChangeEvent, KeyboardEvent, useCallback, useState } from 'react';
 
 type Props = {
   title: string;
   onChangeItemTitle: (title: string) => void;
 };
 
-export function EditableSpan(props: Props) {
-  const [title, setTitle] = useState('');
+export const EditableSpan = React.memo(({ title, onChangeItemTitle }: Props) => {
+  const [spanTitle, setSpanTitle] = useState('');
   const [editMode, setEditMode] = useState(false);
 
-  const activateEditMode = () => {
-    setTitle(props.title);
+  const activateEditMode = useCallback(() => {
+    setSpanTitle(title);
     setEditMode(true);
-  };
+  }, [title]);
 
-  const activateViewMode = () => {
-    props.onChangeItemTitle(title);
+  const activateViewMode = useCallback(() => {
+    onChangeItemTitle(spanTitle);
     setEditMode(false);
-  };
+  }, [onChangeItemTitle, spanTitle]);
 
   const onChangeTitle = (e: ChangeEvent<HTMLInputElement>) => {
-    setTitle(e.currentTarget.value);
+    setSpanTitle(e.currentTarget.value);
   };
 
   const onKeyDownHandler = (e: KeyboardEvent<HTMLInputElement>) => {
@@ -40,7 +40,7 @@ export function EditableSpan(props: Props) {
       <OutlinedInput
         id="outlined-adornment-span"
         onBlur={activateViewMode}
-        value={title}
+        value={spanTitle}
         autoFocus
         onChange={onChangeTitle}
         onKeyDown={onKeyDownHandler}
@@ -59,6 +59,6 @@ export function EditableSpan(props: Props) {
       />
     </FormControl>
   ) : (
-    <span onDoubleClick={activateEditMode}>{props.title}</span>
+    <span onDoubleClick={activateEditMode}>{title}</span>
   );
-}
+});
