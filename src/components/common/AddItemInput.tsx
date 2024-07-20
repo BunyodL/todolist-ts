@@ -3,8 +3,8 @@ import { ControlPoint } from '@mui/icons-material';
 import { IconButton, TextField } from '@mui/material';
 
 type Props = {
-  addItem: (text: string) => void;
-  type?: string;
+  addItem: (title: string) => void;
+  type?: 'task' | 'todolist';
 };
 
 export const AddItemInput = React.memo(({ addItem, type }: Props) => {

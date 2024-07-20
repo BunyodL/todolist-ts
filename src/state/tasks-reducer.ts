@@ -36,7 +36,7 @@ export const tasksReducer = (
     case ADD_TASK: {
       const task: TaskType = {
         id: v1(),
-        title: action.text,
+        title: action.title,
         isDone: false,
       };
 
@@ -101,7 +101,7 @@ export const tasksReducer = (
 
 type AddTaskType = {
   type: typeof ADD_TASK;
-  text: string;
+  title: string;
   todolistId: string;
 };
 
@@ -133,9 +133,9 @@ type ActionsType =
   | AddTodolistType
   | DeleteTodolistType;
 
-export const addTaskAC = (text: string, todolistId: string): AddTaskType => ({
+export const addTaskAC = (title: string, todolistId: string): AddTaskType => ({
   type: ADD_TASK,
-  text,
+  title,
   todolistId,
 });
 

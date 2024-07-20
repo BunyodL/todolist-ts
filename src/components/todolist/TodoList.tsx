@@ -28,8 +28,8 @@ export const TodoList = React.memo(
     const tasks = useAppSelector((s) => s.tasks[id]);
 
     const handleAddTask = useCallback(
-      (text: string) => {
-        dispatch(addTaskAC(text, id));
+      (title: string) => {
+        dispatch(addTaskAC(title, id));
       },
       [dispatch, id]
     );

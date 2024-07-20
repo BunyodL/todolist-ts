@@ -41,10 +41,10 @@ export function App() {
     ],
   });
 
-  function addTask(text: string, todolistId: string) {
+  function addTask(title: string, todolistId: string) {
     const task: TaskType = {
       id: v1(),
-      title: text,
+      title: title,
       isDone: false,
     };
     const tasks = allTasks[todolistId];

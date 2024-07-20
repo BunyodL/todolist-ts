@@ -55,8 +55,8 @@ export function AppWithReducers() {
     ],
   });
 
-  function addTask(text: string, todolistId: string) {
-    const action = addTaskAC(text, todolistId);
+  function addTask(title: string, todolistId: string) {
+    const action = addTaskAC(title, todolistId);
     dispatchToTasksReducer(action);
   }
 
