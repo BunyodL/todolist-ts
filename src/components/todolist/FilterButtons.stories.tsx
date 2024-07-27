@@ -28,27 +28,21 @@ export const Basic: Story = {
   }) => {
     const canvas = within(canvasElement);
 
-    type Filter = {
-      filter: TasksFilterValue;
-      callback: () => void;
-    };
+    const allButton = canvas.getByRole('button', { name: /all/i });
+    await expect(allButton).toBeInTheDocument();
+    await userEvent.click(allButton);
+    await expect(allFilter).toBeCalled();
 
-    const filters: Array<Filter> = [
-      { filter: 'all', callback: allFilter },
-      { filter: 'active', callback: activeFilter },
-      { filter: 'completed', callback: completedFilter },
-    ];
+		const activeButton = canvas.getByRole('button', { name: /active/i });
+    await expect(activeButton).toBeInTheDocument();
+    await userEvent.click(activeButton);
+    await expect(activeFilter).toBeCalled();
 
-    for (let i = 0; i < filters.length; i++) {
-      const filterButton = canvas.getByRole('button', {
-        name: RegExp(`${filters[i].filter}`, 'i'),
-      });
+		const completedButton = canvas.getByRole('button', { name: /completed/i });
+    await expect(completedButton).toBeInTheDocument();
+    await userEvent.click(completedButton);
+    await expect(completedFilter).toBeCalled();
 
-      await expect(filterButton).toBeInTheDocument();
-      await userEvent.click(filterButton);
-      await expect(filters[i].callback).toBeCalled();
-
-      await userEvent.unhover(filterButton);
-    }
+    await userEvent.unhover(completedButton);
   },
 };

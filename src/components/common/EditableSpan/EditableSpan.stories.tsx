@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { fn } from '@storybook/test';
+import { fn, within } from '@storybook/test';
 import { EditableSpan } from './EditableSpan';
 
 const meta = {
@@ -20,7 +20,7 @@ type Story = StoryObj<typeof meta>;
 
 export const Basic: Story = {
 	play: ({canvasElement}) => {
-		const canvas = 
+		const canvas = within(canvasElement);
 
 
 	}
