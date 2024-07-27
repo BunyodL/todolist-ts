@@ -4,10 +4,12 @@ import { TasksFilterValue, TodoListType } from '../@types/todolist/todolist.type
 export const todolistId1 = v1();
 export const todolistId2 = v1();
 
-const initialState: Array<TodoListType> = [
-  { id: todolistId1, title: 'What to learn', filter: 'all' },
-  { id: todolistId2, title: 'What to buy', filter: 'all' },
-];
+// const initialState: Array<TodoListType> = [
+//   { id: todolistId1, title: 'What to learn', filter: 'all' },
+//   { id: todolistId2, title: 'What to buy', filter: 'all' },
+// ];
+
+const initialState: Array<TodoListType> = [];
 
 export const ADD_TODOLIST = 'ADD_TODOLIST';
 export const DELETE_TODOLIST = 'DELETE_TODOLIST';
@@ -15,7 +17,7 @@ const CHANGE_TODOLIST_TITLE = 'CHANGE_TODOLIST_TITLE';
 const CHANGE_TODOLIST_FILTER = 'CHANGE_TODOLIST_FILTER';
 
 export const todolistsReducer = (
-  state: Array<TodoListType> = initialState,
+  state = initialState,
   action: ActionsType
 ): Array<TodoListType> => {
   switch (action.type) {

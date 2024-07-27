@@ -1,13 +1,13 @@
 import './App.css';
 import { TodoList } from './components/todolist/TodoList';
-import { AddItemInput } from './components/common/AddItemInput';
-import { Box, Container, Grid, Paper, Typography } from '@mui/material';
+import { AddItemInput } from './components/common/AddItemInput/AddItemInput';
+import { Box, Container, Grid, Typography } from '@mui/material';
 import { TasksFilterValue } from './@types/todolist';
 import {
-  addTodolistAC,
-  changeTodolistFilterAC,
-  changeTodolistTitleAC,
-  deleteTodolistAC,
+	addTodolistAC,
+	changeTodolistFilterAC,
+	changeTodolistTitleAC,
+	deleteTodolistAC,
 } from './state/todolists-reducer';
 import { useAppDispatch, useAppSelector } from './state/store';
 import { useCallback } from 'react';
@@ -89,22 +89,15 @@ export function AppWithRedux() {
                 item
                 key={tl.id}
               >
-                <Paper
-                  elevation={4}
-                  sx={{
-                    padding: '5px 20px',
-                  }}
-                >
-                  <TodoList
-                    key={tl.id}
-                    id={tl.id}
-                    title={tl.title}
-                    filter={tl.filter}
-                    changeTodoListFilter={changeTodoListFilter}
-                    deleteTodolist={deleteTodolist}
-                    changeTodoListTitle={changeTodoListTitle}
-                  />
-                </Paper>
+                <TodoList
+                  key={tl.id}
+                  id={tl.id}
+                  title={tl.title}
+                  filter={tl.filter}
+                  changeTodoListFilter={changeTodoListFilter}
+                  deleteTodolist={deleteTodolist}
+                  changeTodoListTitle={changeTodoListTitle}
+                />
               </Grid>
             );
           })}

@@ -1,27 +1,23 @@
 import { v1 } from 'uuid';
 import { TaskType, TodoListsTasksType } from '../@types/todolist/todolist.types';
 import {
-  ADD_TODOLIST,
-  AddTodolistType,
-  DELETE_TODOLIST,
-  DeleteTodolistType,
-  todolistId1,
-  todolistId2,
+	ADD_TODOLIST,
+	AddTodolistType,
+	DELETE_TODOLIST,
+	DeleteTodolistType
 } from './todolists-reducer';
 
-const task1Id2 = v1();
-const task1Id3 = v1();
-const task1Id5 = v1();
-const task2Id1 = v1();
 
-const initialState: TodoListsTasksType = {
-  [todolistId1]: [
-    { id: task1Id2, title: 'React', isDone: true },
-    { id: task1Id3, title: 'TypeScript', isDone: true },
-    { id: task1Id5, title: 'WebSocket', isDone: false },
-  ],
-  [todolistId2]: [{ id: task2Id1, title: 'Book', isDone: true }],
-};
+// const initialState: TodoListsTasksType = {
+//   [todolistId1]: [
+//     { id: task1Id2, title: 'React', isDone: true },
+//     { id: task1Id3, title: 'TypeScript', isDone: true },
+//     { id: task1Id5, title: 'WebSocket', isDone: false },
+//   ],
+//   [todolistId2]: [{ id: task2Id1, title: 'Book', isDone: true }],
+// };
+
+const initialState: TodoListsTasksType = {};
 
 const ADD_TASK = 'ADD_TASK';
 const REMOVE_TASK = 'REMOVE_TASK';
@@ -29,7 +25,7 @@ const CHANGE_TASK_TITLE = 'CHANGE_TASK_TITLE';
 const CHANGE_TASK_STATUS = 'CHANGE_TASK_STATUS';
 
 export const tasksReducer = (
-  state: TodoListsTasksType = initialState,
+  state = initialState,
   action: ActionsType
 ): TodoListsTasksType => {
   switch (action.type) {

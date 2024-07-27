@@ -1,64 +1,56 @@
-import React, { ChangeEvent, useCallback } from 'react';
-import { Checkbox, IconButton } from '@mui/material';
-import { EditableSpan } from '../common/EditableSpan';
-import { DeleteOutline } from '@mui/icons-material';
+import React, { ChangeEvent } from 'react';
+import { Checkbox } from '@mui/material';
+import { EditableSpan } from '../common/EditableSpan/EditableSpan';
 import { TaskType } from '../../@types/todolist';
-import { changeTaskStatusAC, changeTaskTitleAC, removeTaskAC } from '../../state/tasks-reducer';
-import { useAppDispatch } from '../../state/store';
+import { DeleteButton } from '../common/DeleteButton';
 
 type Props = {
-  todolistId: string;
   task: TaskType;
+  removeTask: (taskId: string) => void;
+  onTaskStatusChange: (isDone: boolean, taskId: string) => void;
+  onChangeTaskTitle: (title: string, taskId: string) => void;
 };
 
-export const Task = React.memo(({ task, todolistId }: Props) => {
-  const dispatch = useAppDispatch();
+export const Task = React.memo(
+  ({ task, onTaskStatusChange, removeTask, onChangeTaskTitle }: Props) => {
+    const removeTaskHandler = () => {
+      removeTask(task.id);
+    };
 
-  const removeTaskHandler = useCallback(() => {
-    dispatch(removeTaskAC(task.id, todolistId));
-  }, [dispatch, task.id, todolistId]);
+    const checkboxHandler = (e: ChangeEvent<HTMLInputElement>) => {
+      onTaskStatusChange(e.currentTarget.checked, task.id);
+    };
 
-  const checkboxHandler = useCallback(
-    (e: ChangeEvent<HTMLInputElement>) => {
-      dispatch(changeTaskStatusAC(e.currentTarget.checked, task.id, todolistId));
-    },
-    [dispatch, task.id, todolistId]
-  );
+    const taskTitleHandler = (title: string) => {
+      onChangeTaskTitle(title, task.id);
+    };
 
-  const onChangeTaskTitle = useCallback(
-    (title: string) => {
-      dispatch(changeTaskTitleAC(title, task.id, todolistId));
-    },
-    [dispatch, task.id, todolistId]
-  );
-
-  return (
-    <div
-      className={task.isDone ? 'is-done' : ''}
-      style={{
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-      }}
-    >
-      <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-        <Checkbox
-          checked={task.isDone}
-          onChange={checkboxHandler}
-          style={{ padding: 0 }}
-        />
-        <EditableSpan
-          title={task.title}
-          onChangeItemTitle={onChangeTaskTitle}
+    return (
+      <div
+        data-testid="task"
+        className={task.isDone ? 'is-done' : ''}
+        style={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+        }}
+      >
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+          <Checkbox
+            checked={task.isDone}
+            onChange={checkboxHandler}
+            style={{ padding: 0 }}
+          />
+          <EditableSpan
+            title={task.title}
+            onChangeItemTitle={taskTitleHandler}
+          />
+        </div>
+        <DeleteButton
+          onClick={removeTaskHandler}
+          type="task"
         />
       </div>
-      <IconButton
-        onClick={removeTaskHandler}
-        color="error"
-        title={'Delete task'}
-      >
-        <DeleteOutline />
-      </IconButton>
-    </div>
-  );
-});
+    );
+  }
+);

@@ -36,13 +36,7 @@ export const AddItemInput = React.memo(({ addItem, type }: Props) => {
   };
 
   return (
-    <div
-      style={{
-        display: 'flex',
-        alignItems: 'center',
-        gap: 5,
-      }}
-    >
+    <div>
       <TextField
         value={newTaskTitle}
         onChange={handleNewTaskTitle}
@@ -52,10 +46,11 @@ export const AddItemInput = React.memo(({ addItem, type }: Props) => {
         label="Create"
       />
       <IconButton
+        data-testid={type === 'task' ? 'add-task' : 'add-todolist'}
         onClick={handleAddTask}
         size="large"
         color="info"
-        style={{ padding: '8px' }}
+        style={{ margin: '0.25rem' }}
         title={type === 'task' ? 'Add task' : 'Add todolist'}
       >
         <ControlPoint />

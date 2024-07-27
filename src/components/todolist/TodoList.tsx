@@ -1,16 +1,19 @@
-import React, { useCallback, useMemo } from 'react';
-import { AddItemInput } from '../common/AddItemInput';
-import { EditableSpan } from '../common/EditableSpan';
-import { IconButton, Typography } from '@mui/material';
-import { DeleteOutline } from '@mui/icons-material';
+import React from 'react';
+import { AddItemInput } from '../common/AddItemInput/AddItemInput';
+import { EditableSpan } from '../common/EditableSpan/EditableSpan';
+import { Paper, Typography } from '@mui/material';
 import { TasksFilterValue } from '../../@types/todolist/todolist.types';
-import { useAppDispatch, useAppSelector } from '../../state/store';
-import {
-	addTaskAC
-} from '../../state/tasks-reducer';
+import { useAppSelector } from '../../state/store';
 import { EmptyTasks } from './EmptyTasks';
 import { Task } from './Task';
 import { FilterButtons } from './FilterButtons';
+import {
+  useFilterTasks,
+  useFilterButtonsHandlers,
+  useTaskHandlers,
+  useTodoListHandlers,
+} from '../../hooks';
+import { DeleteButton } from '../common/DeleteButton';
 
 type Props = {
   id: string;
@@ -22,55 +25,41 @@ type Props = {
 };
 
 export const TodoList = React.memo(
-  ({ title, changeTodoListFilter, filter, id, deleteTodolist, changeTodoListTitle }: Props) => {
-    const dispatch = useAppDispatch();
-
+  ({
+    title,
+    changeTodoListFilter,
+    filter,
+    id,
+    deleteTodolist,
+    changeTodoListTitle,
+  }: Props) => {
     const tasks = useAppSelector((s) => s.tasks[id]);
 
-    const handleAddTask = useCallback(
-      (title: string) => {
-        dispatch(addTaskAC(title, id));
-      },
-      [dispatch, id]
+    const {
+      handleAddTask,
+      handleRemoveTask,
+      onChangeTaskTitle,
+      onTaskStatusChange,
+    } = useTaskHandlers(id);
+
+    const { activeFilter, allFilter, completedFilter } =
+      useFilterButtonsHandlers(id, changeTodoListFilter);
+
+    const { onChangeTodoListTitle, removeTodolist } = useTodoListHandlers(
+      id,
+      deleteTodolist,
+      changeTodoListTitle
     );
 
-    const allFilter = useCallback(
-      () => changeTodoListFilter('all', id),
-      [changeTodoListFilter, id]
-    );
-
-    const activeFilter = useCallback(
-      () => changeTodoListFilter('active', id),
-      [changeTodoListFilter, id]
-    );
-
-    const completedFilter = useCallback(
-      () => changeTodoListFilter('completed', id),
-      [changeTodoListFilter, id]
-    );
-
-    const removeTodolist = useCallback(() => deleteTodolist(id), [deleteTodolist, id]);
-
-    const onChangeTodoListTitle = useCallback(
-      (title: string) => {
-        changeTodoListTitle(id, title);
-      },
-      [changeTodoListTitle, id]
-    );
-
-    const filteredTasks = useMemo(() => {
-      let tasksForTodolist = tasks;
-      if (filter === 'active') {
-        return (tasksForTodolist = tasksForTodolist.filter((t) => !t.isDone));
-      }
-      if (filter === 'completed') {
-        return (tasksForTodolist = tasksForTodolist.filter((t) => t.isDone));
-      }
-      return tasksForTodolist;
-    }, [filter, tasks]);
+    const filteredTasks = useFilterTasks(tasks, filter);
 
     return (
-      <div className="todoList">
+      <Paper
+        elevation={4}
+        sx={{
+          padding: '5px 20px',
+        }}
+      >
         <Typography
           variant="h5"
           style={{
@@ -85,13 +74,7 @@ export const TodoList = React.memo(
             onChangeItemTitle={onChangeTodoListTitle}
             title={title}
           />
-          <IconButton
-            onClick={removeTodolist}
-            color="error"
-            title={'Delete todolist'}
-          >
-            <DeleteOutline />
-          </IconButton>
+          <DeleteButton onClick={removeTodolist} />
         </Typography>
 
         <AddItemInput
@@ -109,8 +92,10 @@ export const TodoList = React.memo(
             filteredTasks.map((t) => (
               <Task
                 task={t}
-                todolistId={id}
                 key={t.id}
+                removeTask={handleRemoveTask}
+                onTaskStatusChange={onTaskStatusChange}
+                onChangeTaskTitle={onChangeTaskTitle}
               />
             ))
           )}
@@ -122,7 +107,7 @@ export const TodoList = React.memo(
           completedFilter={completedFilter}
           filter={filter}
         />
-      </div>
+      </Paper>
     );
   }
 );
