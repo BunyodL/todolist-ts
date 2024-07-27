@@ -43,10 +43,9 @@ export const AddItemInput = React.memo(({ addItem, type }: Props) => {
         onKeyDown={onKeyDownHandler}
         helperText={error}
         error={!!error}
-        label="Create"
+        label={type === 'task' ? 'Create task' : 'Create todolist'}
       />
       <IconButton
-        data-testid={type === 'task' ? 'add-task' : 'add-todolist'}
         onClick={handleAddTask}
         size="large"
         color="info"

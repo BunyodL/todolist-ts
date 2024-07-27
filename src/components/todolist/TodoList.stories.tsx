@@ -4,7 +4,7 @@ import { TodoList } from './TodoList';
 import { withProviderDecorator } from '../utils/withProviderDecorator';
 
 const meta = {
-  title: 'Todolist',
+  title: 'Todolist/Todolist',
   component: TodoList,
   parameters: {
     layout: 'centered',
@@ -55,7 +55,7 @@ export const Basic: Story = {
     await userEvent.type(addItemInput, 'React');
     await userEvent.click(addTaskButton);
 
-    const task = canvas.getByTestId('task');
+    const task = canvas.getByText('React');
     await expect(task).toBeInTheDocument();
 
     const deleteTaskButton = canvas.getByRole('button', {

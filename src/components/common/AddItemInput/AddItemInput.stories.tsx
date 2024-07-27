@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { fn, within, userEvent, expect } from '@storybook/test';
 
 const meta = {
-  title: 'AddItem Input',
+  title: 'Common/AddItem Input',
   component: AddItemInput,
   parameters: {
     layout: 'centered',
@@ -26,7 +26,7 @@ export const Basic: Story = {
     await userEvent.type(input, 'some text');
     await userEvent.click(addButton);
 
-    await expect(addItem).toBeCalled();
+    await expect(addItem).toBeCalledTimes(1);
 
     await userEvent.unhover(addButton);
   },

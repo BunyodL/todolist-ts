@@ -27,7 +27,6 @@ export const Task = React.memo(
 
     return (
       <div
-        data-testid="task"
         className={task.isDone ? 'is-done' : ''}
         style={{
           display: 'flex',
