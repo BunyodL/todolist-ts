@@ -25,13 +25,6 @@ const config: StorybookConfig = {
         },
       },
     },
-		{
-      name: '@storybook/addon-docs',
-      options: {
-        csfPluginOptions: null,
-        mdxPluginOptions: {},
-      },
-    },
   ],
   framework: {
     name: '@storybook/react-webpack5',
