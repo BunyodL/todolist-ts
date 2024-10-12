@@ -1,19 +1,19 @@
-import React from 'react';
-import { AddItemInput } from '../common/AddItemInput/AddItemInput';
-import { EditableSpan } from '../common/EditableSpan/EditableSpan';
-import { Paper, Typography } from '@mui/material';
-import { TasksFilterValue } from '../../@types/todolist/todolist.types';
-import { useAppSelector } from '../../state/store';
-import { EmptyTasks } from './EmptyTasks';
-import { Task } from './Task';
-import { FilterButtons } from './FilterButtons';
+import React from "react";
+import { AddItemInput } from "../common/AddItemInput/AddItemInput";
+import { EditableSpan } from "../common/EditableSpan/EditableSpan";
+import { Paper, Typography } from "@mui/material";
+import { TasksFilterValue } from "../../@types/todolist/todolist.types";
+import { useAppSelector } from "../../state/store";
+import { EmptyTasks } from "./EmptyTasks";
+import { Task } from "./Task";
 import {
   useFilterTasks,
   useFilterButtonsHandlers,
   useTaskHandlers,
   useTodoListHandlers,
-} from '../../hooks';
-import { DeleteButton } from '../common/DeleteButton';
+} from "../../hooks";
+import { DeleteButton } from "../common/DeleteButton";
+import { FooterBlock } from "./ui/FooterBlock";
 
 type Props = {
   id: string;
@@ -25,31 +25,19 @@ type Props = {
 };
 
 export const TodoList = React.memo(
-  ({
-    title,
-    changeTodoListFilter,
-    filter,
-    id,
-    deleteTodolist,
-    changeTodoListTitle,
-  }: Props) => {
+  ({ title, changeTodoListFilter, filter, id, deleteTodolist, changeTodoListTitle }: Props) => {
     const tasks = useAppSelector((s) => s.tasks[id]);
 
-    const {
-      handleAddTask,
-      handleRemoveTask,
-      onChangeTaskTitle,
-      onTaskStatusChange,
-    } = useTaskHandlers(id);
+    const { handleAddTask, handleRemoveTask, onChangeTaskTitle, onTaskStatusChange } =
+      useTaskHandlers(id);
 
-    const { activeFilter, allFilter, completedFilter } =
-      useFilterButtonsHandlers(id, changeTodoListFilter);
-
-    const { onChangeTodoListTitle, removeTodolist } = useTodoListHandlers(
+    const { activeFilter, allFilter, completedFilter } = useFilterButtonsHandlers(
       id,
-      deleteTodolist,
-      changeTodoListTitle
+      changeTodoListFilter,
     );
+
+    const { onChangeTodoListTitle, removeTodolist, handleClearCompletedTasks } =
+      useTodoListHandlers(id, deleteTodolist, changeTodoListTitle);
 
     const filteredTasks = useFilterTasks(tasks, filter);
 
@@ -57,16 +45,16 @@ export const TodoList = React.memo(
       <Paper
         elevation={4}
         sx={{
-          padding: '5px 20px',
+          padding: "5px 20px",
         }}
       >
         <Typography
           variant="h5"
           style={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            paddingBlock: '1rem',
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            paddingBlock: "1rem",
             fontWeight: 600,
           }}
         >
@@ -79,11 +67,11 @@ export const TodoList = React.memo(
 
         <AddItemInput
           addItem={handleAddTask}
-          type={'task'}
+          type={"task"}
         />
         <div
           style={{
-            paddingBlock: '10px',
+            paddingBlock: "10px",
           }}
         >
           {!filteredTasks.length ? (
@@ -100,14 +88,14 @@ export const TodoList = React.memo(
             ))
           )}
         </div>
-
-        <FilterButtons
+        <FooterBlock
           activeFilter={activeFilter}
           allFilter={allFilter}
           completedFilter={completedFilter}
           filter={filter}
+          handleClearCompletedTasks={handleClearCompletedTasks}
         />
       </Paper>
     );
-  }
+  },
 );

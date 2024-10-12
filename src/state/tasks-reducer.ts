@@ -1,33 +1,21 @@
-import { v1 } from 'uuid';
-import { TaskType, TodoListsTasksType } from '../@types/todolist/todolist.types';
+import { v1 } from "uuid";
+import { TaskType, TodoListsTasksType } from "../@types/todolist/todolist.types";
 import {
-	ADD_TODOLIST,
-	AddTodolistType,
-	DELETE_TODOLIST,
-	DeleteTodolistType
-} from './todolists-reducer';
-
-
-// const initialState: TodoListsTasksType = {
-//   [todolistId1]: [
-//     { id: task1Id2, title: 'React', isDone: true },
-//     { id: task1Id3, title: 'TypeScript', isDone: true },
-//     { id: task1Id5, title: 'WebSocket', isDone: false },
-//   ],
-//   [todolistId2]: [{ id: task2Id1, title: 'Book', isDone: true }],
-// };
+  ADD_TODOLIST,
+  AddTodolistType,
+  DELETE_TODOLIST,
+  DeleteTodolistType,
+} from "./todolists-reducer";
 
 const initialState: TodoListsTasksType = {};
 
-const ADD_TASK = 'ADD_TASK';
-const REMOVE_TASK = 'REMOVE_TASK';
-const CHANGE_TASK_TITLE = 'CHANGE_TASK_TITLE';
-const CHANGE_TASK_STATUS = 'CHANGE_TASK_STATUS';
+const ADD_TASK = "ADD_TASK";
+const REMOVE_TASK = "REMOVE_TASK";
+const CHANGE_TASK_TITLE = "CHANGE_TASK_TITLE";
+const CHANGE_TASK_STATUS = "CHANGE_TASK_STATUS";
+const CLEAR_COMPLETED_TASKS = "CLEAR_COMPLETED_TASKS";
 
-export const tasksReducer = (
-  state = initialState,
-  action: ActionsType
-): TodoListsTasksType => {
+export const tasksReducer = (state = initialState, action: ActionsType): TodoListsTasksType => {
   switch (action.type) {
     case ADD_TASK: {
       const task: TaskType = {
@@ -77,6 +65,15 @@ export const tasksReducer = (
       };
     }
 
+    case CLEAR_COMPLETED_TASKS: {
+      return {
+        ...state,
+        [action.todolistId]: state[action.todolistId].filter((task) => {
+          return task.isDone !== true;
+        }),
+      };
+    }
+
     case ADD_TODOLIST: {
       return {
         ...state,
@@ -120,12 +117,17 @@ type ChangeTaskStatusType = {
   todolistId: string;
   isDone: boolean;
 };
+type CLearCompletedTasksType = {
+  type: typeof CLEAR_COMPLETED_TASKS;
+  todolistId: string;
+};
 
 type ActionsType =
   | AddTaskType
   | RemoveTaskType
   | ChangeTaskTitleType
   | ChangeTaskStatusType
+  | CLearCompletedTasksType
   | AddTodolistType
   | DeleteTodolistType;
 
@@ -144,7 +146,7 @@ export const removeTaskAC = (taskId: string, todolistId: string): RemoveTaskType
 export const changeTaskTitleAC = (
   title: string,
   taskId: string,
-  todolistId: string
+  todolistId: string,
 ): ChangeTaskTitleType => ({
   type: CHANGE_TASK_TITLE,
   todolistId,
@@ -155,10 +157,14 @@ export const changeTaskTitleAC = (
 export const changeTaskStatusAC = (
   isDone: boolean,
   taskId: string,
-  todolistId: string
+  todolistId: string,
 ): ChangeTaskStatusType => ({
   type: CHANGE_TASK_STATUS,
   todolistId,
   taskId,
   isDone,
+});
+export const clearCompletedTasks = (todolistId: string): CLearCompletedTasksType => ({
+  type: CLEAR_COMPLETED_TASKS,
+  todolistId,
 });
