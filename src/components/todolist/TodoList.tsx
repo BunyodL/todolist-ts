@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { AddItemInput } from "../common/AddItemInput/AddItemInput";
 import { EditableSpan } from "../common/EditableSpan/EditableSpan";
 import { Paper, Typography } from "@mui/material";
@@ -40,6 +40,8 @@ export const TodoList = React.memo(
       useTodoListHandlers(id, deleteTodolist, changeTodoListTitle);
 
     const filteredTasks = useFilterTasks(tasks, filter);
+    const allTasks = useMemo(() => tasks.length, [tasks]);
+    const activeTasks = useMemo(() => tasks.filter((task) => task.isDone !== true).length, [tasks]);
 
     return (
       <Paper
@@ -94,6 +96,8 @@ export const TodoList = React.memo(
           completedFilter={completedFilter}
           filter={filter}
           handleClearCompletedTasks={handleClearCompletedTasks}
+          activeTasks={activeTasks}
+          tasks={allTasks}
         />
       </Paper>
     );
