@@ -4,11 +4,6 @@ import { TasksFilterValue, TodoListType } from '../@types/todolist/todolist.type
 export const todolistId1 = v1();
 export const todolistId2 = v1();
 
-// const initialState: Array<TodoListType> = [
-//   { id: todolistId1, title: 'What to learn', filter: 'all' },
-//   { id: todolistId2, title: 'What to buy', filter: 'all' },
-// ];
-
 const initialState: Array<TodoListType> = [];
 
 export const ADD_TODOLIST = 'ADD_TODOLIST';
